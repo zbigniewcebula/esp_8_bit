@@ -19,7 +19,7 @@
 using namespace std;
 
 // Map files into memory for carts bigger than physical RAM
-// Handly for NES/SMS carts
+// Handly for NES carts
 // Uses app1 as a cache with a crappy FS on top - default arduino config gives 1280k
 
 #ifdef ESP_PLATFORM
@@ -303,12 +303,12 @@ int unpack(const char* dst, const uint8_t* d, int len)
     return 0;
 }
 
-Emu::Emu(const char* n,int w,int h, int st, int aformat, int cc, int f) :
-    name(n),width(w),height(h),standard(st),audio_format(aformat),cc_width(cc),flavor(f)
+Emu::Emu(const char* n,int w,int h, int aformat, int cc) :
+    name(n),width(w),height(h),audio_format(aformat),cc_width(cc)
 {
     //audio_frequency = 15625; // requires fixed point sampler
-    audio_frequency = standard == 1 ? 15720 : 15600;
-    audio_frame_samples = standard ? (audio_frequency << 16)/60 : (audio_frequency << 16)/50;   // fixed point sampler
+    audio_frequency = 15720;
+    audio_frame_samples = (audio_frequency << 16)/60;   // fixed point sampler
     audio_fraction = 0;
 }
 
@@ -330,7 +330,7 @@ int Emu::insert(const std::string& path, int flags, int disk_index)
 
 const uint32_t* Emu::composite_palette()
 {
-    return standard ? ntsc_palette() : pal_palette();
+    return ntsc_palette();
 }
 
 // determine file type

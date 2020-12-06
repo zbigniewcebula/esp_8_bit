@@ -31,11 +31,6 @@
 #include "hid_server/hid_server.h"
 #include "../config.h"
 
-#define EMU_ATARI 1
-#define EMU_NES 2
-#define EMU_NES6 4
-#define EMU_SMS 3
-
 extern "C"
 void* MALLOC32(int size, const char* name);
 
@@ -84,7 +79,6 @@ public:
 
     int width;
     int height;
-    int standard; // ntsc = 1
 
     int audio_frequency;
     int audio_frame_samples;
@@ -92,14 +86,13 @@ public:
     int audio_format;
 
     int cc_width;           // number of samples per color clock
-    int flavor;             // color flavor (cleaner?);
 
-    Emu(const char* n, int w, int h, int standard, int aformat, int cc, int flavor);
+    Emu(const char* n, int w, int h, int aformat, int cc);
     virtual ~Emu();
 
     virtual void gen_palettes() = 0;
 
-    int frame_sample_count();   // # of audio samples for next frame (standard dependent)
+    int frame_sample_count();   // # of audio samples for next frame (ntsc dependent)
 
     virtual int make_default_media(const std::string& path) = 0;
 
@@ -140,8 +133,6 @@ void audio_write_16(const int16_t* s, int len, int channels);
 int get_hid_ir(uint8_t* dst);
 uint32_t generic_map(uint32_t m, const uint32_t* target);
 
-Emu* NewAtari800(int ntsc = 1);
-Emu* NewNofrendo(int ntsc = 1);
-Emu* NewSMSPlus(int ntsc = 1);
+Emu* NewNofrendo();
 
 #endif /* emu_hpp */

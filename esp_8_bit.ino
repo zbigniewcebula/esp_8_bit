@@ -26,31 +26,14 @@
 #include "src/video_out.h"
 
 // esp_8_bit
-// Atari 8 computers, NES and SMS game consoles on your TV with nothing more than a ESP32 and a sense of nostalgia
-// Supports NTSC/PAL composite video, Bluetooth Classic keyboards and joysticks
-// Edit src/config.h to setup emulator and video standard
+// NES on your TFT with nothing more than a ESP32 and a sense of nostalgia
+// Bluetooth Classic keyboards and joysticks
+// Edit src/config.h to setup emulator
  
 // The filesystem should contain folders named for each of the emulators i.e.
-//    atari800
 //    nofrendo
-//    smsplus
 // Folders will be auto-populated on first launch with a built in selection of sample media.
 // Use 'ESP32 Sketch Data Upload' from the 'Tools' menu to copy a prepared data folder to ESP32
-
-// Create a new emulator, messy ifdefs ensure that only one links at a time
-Emu* NewEmulator()
-{  
-  #if (EMULATOR==EMU_NES)
-  return NewNofrendo(VIDEO_STANDARD);
-  #endif
-  #if (EMULATOR==EMU_SMS)
-  return NewSMSPlus(VIDEO_STANDARD);
-  #endif
-  #if (EMULATOR==EMU_ATARI)
-  return NewAtari800(VIDEO_STANDARD);
-  #endif
-  printf("Must choose one of the following emulators: EMU_NES,EMU_SMS,EMU_ATARI\n");
-}
 
 Emu* _emu = 0;            // emulator running on core 0
 uint32_t _frame_time = 0;
@@ -144,14 +127,14 @@ void setup()
       
   rtc_clk_cpu_freq_set(RTC_CPU_FREQ_240M);  
   mount_filesystem();                       // mount the filesystem!
-  _emu = NewEmulator();                     // create the emulator!
+  _emu = NewNofrendo();                  // create the emulator!
   hid_init("emu32");                        // bluetooth hid on core 1!
 
   #ifdef SINGLE_CORE
   emu_init();
-  video_init(_emu->cc_width,_emu->flavor,_emu->composite_palette(),_emu->standard); // start the A/V pump on app core
+  video_init(_emu->cc_width,_emu->composite_palette()); // start the A/V pump on app core
   #else
-  xTaskCreatePinnedToCore(emu_task, "emu_task", EMULATOR == EMU_NES ? 5*1024 : 3*1024, NULL, 0, NULL, 0); // nofrendo needs 5k word stack, start on core 0
+  xTaskCreatePinnedToCore(emu_task, "emu_task", 5*1024, NULL, 0, NULL, 0); // nofrendo needs 5k word stack, start on core 0
   #endif
 }
 
@@ -160,7 +143,7 @@ void perf()
 {
   static int _next = 0;
   if (_drawn >= _next) {
-    float elapsed_us = 120*1000000/(_emu->standard ? 60 : 50);
+    float elapsed_us = 120 * 1000000 / 60;
     _next = _drawn + 120;
     
     printf("frame_time:%d drawn:%d displayed:%d blit_ticks:%d->%d, isr time:%2.2f%%\n",
@@ -185,7 +168,7 @@ void loop()
   if (!_inited) {
     if (_lines) {
       printf("video_init\n");
-      video_init(_emu->cc_width,_emu->flavor,_emu->composite_palette(),_emu->standard); // start the A/V pump
+      video_init(_emu->cc_width,_emu->composite_palette()); // start the A/V pump
       _inited = true;
     } else {
       vTaskDelay(1);

@@ -1,22 +1,10 @@
 #pragma GCC optimize ("O2")
 #pragma once
-#define PAL 0
-#define NTSC 1
 
 /******************************************************************/
 /*Some stats about where we spend our time*/
 /******************************************************************/
 //#define PERF
-
-/******************************************************************/
-/*Choose one of the video standards: PAL or NTSC*/
-/******************************************************************/
-#define VIDEO_STANDARD NTSC
-
-/******************************************************************/
-/*Choose one of the following emulators: EMU_NES,EMU_SMS,EMU_ATARI*/
-/******************************************************************/
-#define EMULATOR EMU_NES
 
 /******************************************************************/
 /*Many emus work fine on a single core (S2), file system access can cause a little flickering*/
@@ -57,7 +45,7 @@
 #define NES_CTRL_CLK 22    //    # CLOCK 	(green)
 
 // Define this to enable SD card with FAT 8.3 filenames
-// Note that each emulator has its own folder. Place ROMs under /nonfredo for NES, /smsplus for SMS and /atari800 for atari
+// Note that each emulator has its own folder. Place ROMs under /nonfredo for NES
 //#define USE_SD_CARD
 // SD card pin mapping
 #define CONFIG_SD_CS 15

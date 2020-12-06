@@ -15,7 +15,6 @@
 ** SOFTWARE.
 */
 
-#ifdef ESP_PLATFORM
 #include "esp_types.h"
 #include "esp_heap_caps.h"
 #include "esp_attr.h"
@@ -110,14 +109,10 @@ static esp_err_t start_dma(int line_width,int samples_per_cc, int ch = 1)
     //  up to 20mhz seems to work ok:
     //  rtc_clk_apll_enable(1,0x00,0x00,0x4,0);   // 20mhz for fancy DDS
 
-#if VIDEO_STANDARD > 0	//NTSC
-        switch (samples_per_cc) {
-            case 3: rtc_clk_apll_enable(1,0x46,0x97,0x4,2);   break;    // 10.7386363636 3x NTSC (10.7386398315mhz)
-            case 4: rtc_clk_apll_enable(1,0x46,0x97,0x4,1);   break;    // 14.3181818182 4x NTSC (14.3181864421mhz)
-        }
-#else	//PAL
-        rtc_clk_apll_enable(1,0x04,0xA4,0x6,1);     // 17.734476mhz ~4x PAL
-#endif
+    switch (samples_per_cc) {
+        case 3: rtc_clk_apll_enable(1,0x46,0x97,0x4,2);   break;    // 10.7386363636 3x NTSC (10.7386398315mhz)
+        case 4: rtc_clk_apll_enable(1,0x46,0x97,0x4,1);   break;    // 14.3181818182 4x NTSC (14.3181864421mhz)
+    }
 
     I2S0.clkm_conf.clkm_div_num = 1;            // I2S clock divider’s integral value.
     I2S0.clkm_conf.clkm_div_b = 0;              // Fractional clock divider’s numerator value.
@@ -233,38 +228,10 @@ void* MALLOC32(int x, const char* label)
     return r;
 }
 
-#else	//ESP_PLATFORM
-//====================================================================================================
-//  Simulator
-//====================================================================================================
-#define IRAM_ATTR
-#define DRAM_ATTR
-
-void video_init_hw(int line_width, int samples_per_cc);
-
-uint32_t xthal_get_ccount() {
-    unsigned int lo,hi;
-    __asm__ __volatile__ ("rdtsc" : "=a" (lo), "=d" (hi));
-    return lo;
-    //return ((uint64_t)hi << 32) | lo;
-}
-
-void audio_sample(uint8_t s);
-
-void ir_sample();
-
-int get_hid_ir(uint8_t* buf)
-{
-    return 0;
-}
-#endif	//ESP_PLATFORM
-
 //===================================================================================================
 // ntsc tables
 //===================================================================================================
-// AA AA                // 2 pixels, 1 color clock - atari
 // AA AB BB             // 3 pixels, 2 color clocks - nes
-// AAA ABB BBC CCC      // 4 pixels, 3 color clocks - sms
 
 // cc == 3 gives 684 samples per line, 3 samples per cc, 3 pixels for 2 cc
 // cc == 4 gives 912 samples per line, 4 samples per cc, 2 pixels per cc
@@ -314,7 +281,6 @@ int _line_count;
 
 int _line_width;
 int _samples_per_cc;
-int _machine; // 2:1 3:2 4:3 3:4 input pixel to color clock ratio
 const uint32_t* _palette;
 
 float _sample_rate;
@@ -402,14 +368,9 @@ void IRAM_ATTR test_wave(volatile void* vbuf, int t = 1)
     }
 }*/
 
-#if VIDEO_STANDARD > 0
-//=====================================================================================
-//NTSC VIDEO
-//=====================================================================================
-void video_init(int samples_per_cc, int machine, const uint32_t* palette, int ntsc)
+void video_init(int samples_per_cc, const uint32_t* palette)
 {
     _samples_per_cc = samples_per_cc;
-    _machine = machine;
     _palette = palette;
 
     _sample_rate = 315.0/88 * samples_per_cc;   // DAC rate
@@ -419,7 +380,7 @@ void video_init(int samples_per_cc, int machine, const uint32_t* palette, int nt
     _active_start = usec(samples_per_cc == 4 ? 10 : 10.5);
     _hsync = usec(4.7);
     _active_lines = 240;
-    video_init_hw(_line_width,_samples_per_cc);    // init the hardware
+    video_init_hw(_line_width, _samples_per_cc);    // init the hardware
 }
 
 // draw a line of game in NTSC
@@ -433,77 +394,54 @@ void IRAM_ATTR blit(uint8_t* src, uint16_t* dst)
 
     BEGIN_TIMING();
 
-    switch (_machine) {
-        case EMU_ATARI:
-            // 2 pixels per color clock, 4 samples per cc, used by atari
-            // AA AA
-            // 192 color clocks wide
-            // only show 336 pixels
-            src += 24;
-            d += 16;
-            for (i = 0; i < (384-48); i += 4) {
-                uint32_t c = *((uint32_t*)src); // screen may be in 32 bit mem
-                d[0] = p[(uint8_t)c];
-                d[1] = p[(uint8_t)(c>>8)] << 8;
-                d[2] = p[(uint8_t)(c>>16)];
-                d[3] = p[(uint8_t)(c>>24)] << 8;
-                d += 4;
-                src += 4;
-            }
-            break;
+    /*
+    // 3 pixels to 2 color clocks, 3 samples per cc, used by nes
+    // could be faster with better tables: 2953 cycles ish
+    // about 18% of the core at 240Mhz
+    // 170 color clocks wide: not all that attractive
+    // AA AB BB
+    for (i = 0; i < 255; i += 3) {
+        color = p[src[i+0] & 0x3F];
+        dst[0^1] = P0;
+        dst[1^1] = P1;
+        color = p[src[i+1] & 0x3F];
+        dst[2^1] = P2;
+        dst[3^1] = P0;
+        color = p[src[i+2] & 0x3F];
+        dst[4^1] = P1;
+        dst[5^1] = P2;
+        dst += 6;
+    }
+    // last pixel
+    color = p[src[i+0]];
+    dst[0^1] = P0;
+    dst[1^1] = P1;
+    break;*/
 
-        /*case EMU_NES:
-            // 3 pixels to 2 color clocks, 3 samples per cc, used by nes
-            // could be faster with better tables: 2953 cycles ish
-            // about 18% of the core at 240Mhz
-            // 170 color clocks wide: not all that attractive
-            // AA AB BB
-            for (i = 0; i < 255; i += 3) {
-                color = p[src[i+0] & 0x3F];
-                dst[0^1] = P0;
-                dst[1^1] = P1;
-                color = p[src[i+1] & 0x3F];
-                dst[2^1] = P2;
-                dst[3^1] = P0;
-                color = p[src[i+2] & 0x3F];
-                dst[4^1] = P1;
-                dst[5^1] = P2;
-                dst += 6;
-            }
-            // last pixel
-            color = p[src[i+0]];
-            dst[0^1] = P0;
-            dst[1^1] = P1;
-            break;*/
+    mask = 0x3F;
 
-        case EMU_NES:
-            mask = 0x3F;
-        case EMU_SMS:
-            // AAA ABB BBC CCC
-            // 4 pixels, 3 color clocks, 4 samples per cc
-            // each pixel gets 3 samples, 192 color clocks wide
-            for (i = 0; i < 256; i += 4) {
-                c = *((uint32_t*)(src+i));
-                color = p[c & mask];
-                dst[0^1] = P0;
-                dst[1^1] = P1;
-                dst[2^1] = P2;
-                color = p[(c >> 8) & mask];
-                dst[3^1] = P3;
-                dst[4^1] = P0;
-                dst[5^1] = P1;
-                color = p[(c >> 16) & mask];
-                dst[6^1] = P2;
-                dst[7^1] = P3;
-                dst[8^1] = P0;
-                color = p[(c >> 24) & mask];
-                dst[9^1] = P1;
-                dst[10^1] = P2;
-                dst[11^1] = P3;
-                dst += 12;
-            }
-            break;
-
+    // AAA ABB BBC CCC
+    // 4 pixels, 3 color clocks, 4 samples per cc
+    // each pixel gets 3 samples, 192 color clocks wide
+    for (i = 0; i < 256; i += 4) {
+        c = *((uint32_t*)(src+i));
+        color = p[c & mask];
+        dst[0^1] = P0;
+        dst[1^1] = P1;
+        dst[2^1] = P2;
+        color = p[(c >> 8) & mask];
+        dst[3^1] = P3;
+        dst[4^1] = P0;
+        dst[5^1] = P1;
+        color = p[(c >> 16) & mask];
+        dst[6^1] = P2;
+        dst[7^1] = P3;
+        dst[8^1] = P0;
+        color = p[(c >> 24) & mask];
+        dst[9^1] = P1;
+        dst[10^1] = P2;
+        dst[11^1] = P3;
+        dst += 12;
     }
     END_TIMING();
 }
@@ -615,263 +553,3 @@ void IRAM_ATTR video_isr(volatile void* vbuf)
 
     ISR_END();
 }
-
-#else
-//=====================================================================================
-//PAL VIDEO
-//=====================================================================================
-void video_init(int samples_per_cc, int machine, const uint32_t* palette, int ntsc)
-{
-    int cc_width = 4;
-    _samples_per_cc = samples_per_cc;
-    _machine = machine;
-    _palette = palette;
-    _sample_rate = PAL_FREQUENCY*cc_width/1000000.0;       // DAC rate in mhz
-    _line_width = PAL_COLOR_CLOCKS_PER_SCANLINE*cc_width;
-    _line_count = PAL_LINES;
-    _hsync_short = usec(2.f);
-    _hsync_long = usec(30.f);
-    _hsync = usec(4.7f);
-    _burst_start = usec(5.6f);
-    _burst_width = (int)(10*cc_width + 4) & 0xFFFE;
-    _active_start = usec(10.4f);
-
-    // make colorburst tables for even and odd lines
-    _burst0 = new int16_t[_burst_width];
-    _burst1 = new int16_t[_burst_width];
-    float phase = M_PI;
-    for (int i = 0; i < _burst_width; i++)
-    {
-        _burst0[i] = BLANKING_LEVEL + sin(phase + 3.f*M_PI/4.f) * BLANKING_LEVEL/1.5f;
-        _burst1[i] = BLANKING_LEVEL + sin(phase - 3.f*M_PI/4.f) * BLANKING_LEVEL/1.5f;
-        phase += 2.f*M_PI/cc_width;
-    }
-    
-    _active_lines = 240;
-    video_init_hw(_line_width,_samples_per_cc);    // init the hardware
-}
-
-void IRAM_ATTR blit(uint8_t* src, uint16_t* dst)
-{
-    uint32_t c,color;
-    bool even = _line_counter & 1;
-    const uint32_t* p = even ? _palette : _palette + 256;
-    int left = 0;
-    int right = 256;
-    uint8_t mask = 0xFF;
-    uint8_t c0,c1,c2,c3,c4;
-    uint8_t y1,y2,y3;
-
-    switch (_machine) {
-        case EMU_ATARI:
-            // pal is 5/4 wider than ntsc to account for pal 288 color clocks per line vs 228 in ntsc
-            // so do an ugly stretch on pixels (actually luma) to accomodate -> 384 pixels are now 240 pal color clocks wide
-            left = 24;
-            right = 384-24; // only show center 336 pixels
-            dst += 40;
-            for (int i = left; i < right; i += 4) {
-                c = *((uint32_t*)(src+i));
-
-                // make 5 colors out of 4 by interpolating y: 0000 0111 1122 2223 3333
-                c0 = c;
-                c1 = c >> 8;
-                c3 = c >> 16;
-                c4 = c >> 24;
-                y1 = (((c1 & 0xF) << 1) + ((c0 + c1) & 0x1F) + 2) >> 2;    // (c0 & 0xF)*0.25 + (c1 & 0xF)*0.75;
-                y2 = ((c1 + c3 + 1) >> 1) & 0xF;                           // (c1 & 0xF)*0.50 + (c2 & 0xF)*0.50;
-                y3 = (((c3 & 0xF) << 1) + ((c3 + c4) & 0x1F) + 2) >> 2;    // (c2 & 0xF)*0.75 + (c3 & 0xF)*0.25;
-                c1 = (c1 & 0xF0) + y1;
-                c2 = (c1 & 0xF0) + y2;
-                c3 = (c3 & 0xF0) + y3;
-
-                color = p[c0];
-                dst[0^1] = P0;
-                dst[1^1] = P1;
-                color = p[c1];
-                dst[2^1] = P2;
-                dst[3^1] = P3;
-                color = p[c2];
-                dst[4^1] = P0;
-                dst[5^1] = P1;
-                color = p[c3];
-                dst[6^1] = P2;
-                dst[7^1] = P3;
-                color = p[c4];
-                dst[8^1] = P0;
-                dst[9^1] = P1;
-
-                i += 4;
-                c = *((uint32_t*)(src+i));
-                
-                // make 5 colors out of 4 by interpolating y: 0000 0111 1122 2223 3333
-                c0 = c;
-                c1 = c >> 8;
-                c3 = c >> 16;
-                c4 = c >> 24;
-                y1 = (((c1 & 0xF) << 1) + ((c0 + c1) & 0x1F) + 2) >> 2;    // (c0 & 0xF)*0.25 + (c1 & 0xF)*0.75;
-                y2 = ((c1 + c3 + 1) >> 1) & 0xF;                           // (c1 & 0xF)*0.50 + (c2 & 0xF)*0.50;
-                y3 = (((c3 & 0xF) << 1) + ((c3 + c4) & 0x1F) + 2) >> 2;    // (c2 & 0xF)*0.75 + (c3 & 0xF)*0.25;
-                c1 = (c1 & 0xF0) + y1;
-                c2 = (c1 & 0xF0) + y2;
-                c3 = (c3 & 0xF0) + y3;
-
-                color = p[c0];
-                dst[10^1] = P2;
-                dst[11^1] = P3;
-                color = p[c1];
-                dst[12^1] = P0;
-                dst[13^1] = P1;
-                color = p[c2];
-                dst[14^1] = P2;
-                dst[15^1] = P3;
-                color = p[c3];
-                dst[16^1] = P0;
-                dst[17^1] = P1;
-                color = p[c4];
-                dst[18^1] = P2;
-                dst[19^1] = P3;
-                dst += 20;
-            }
-            return;
-
-        case EMU_NES:
-            // 192 of 288 color clocks wide: roughly correct aspect ratio
-            mask = 0x3F;
-            if (!even)
-              p = _palette + 64;
-            dst += 88;
-            break;
-          
-        case EMU_SMS:
-            // 192 of 288 color clocks wide: roughly correct aspect ratio
-            dst += 88;
-            break;
-    }
-
-    // 4 pixels over 3 color clocks, 12 samples
-    // do the blitting
-    for (int i = left; i < right; i += 4) {
-        c = *((uint32_t*)(src+i));
-        color = p[c & mask];
-        dst[0^1] = P0;
-        dst[1^1] = P1;
-        dst[2^1] = P2;
-        color = p[(c >> 8) & mask];
-        dst[3^1] = P3;
-        dst[4^1] = P0;
-        dst[5^1] = P1;
-        color = p[(c >> 16) & mask];
-        dst[6^1] = P2;
-        dst[7^1] = P3;
-        dst[8^1] = P0;
-        color = p[(c >> 24) & mask];
-        dst[9^1] = P1;
-        dst[10^1] = P2;
-        dst[11^1] = P3;
-        dst += 12;
-    }
-}
-
-void IRAM_ATTR burst(uint16_t* line)
-{
-    line += _burst_start;
-    int16_t* b = (_line_counter & 1) ? _burst0 : _burst1;
-    for (int i = 0; i < _burst_width; i += 2) {
-        line[i^1] = b[i];
-        line[(i+1)^1] = b[i+1];
-    }
-}
-	
-void IRAM_ATTR sync(uint16_t* line, int syncwidth)
-{
-    //Front porch
-	for (int i = 0; i < 8; i++)
-        line[i] = BLANKING_LEVEL;
-    //Sync
-	for (int i = 8; i < syncwidth; i++)
-        line[i] = SYNC_LEVEL;
-}
-
-void IRAM_ATTR blanking(uint16_t* line, bool vbl)
-{
-    int syncwidth = vbl ? _hsync_long : _hsync;
-    sync(line,syncwidth);
-    for (int i = syncwidth; i < _line_width; i++)
-        line[i] = BLANKING_LEVEL;
-    if (!vbl)
-        burst(line);    // no burst during vbl
-}
-
-// Fancy pal non-interlace
-// http://martin.hinner.info/vga/pal.html
-void IRAM_ATTR vsync2(uint16_t* line, int width, int swidth)
-{
-    swidth = swidth ? _hsync_long : _hsync_short;
-    int i;
-    for (i = 0; i < swidth; i++)
-        line[i] = SYNC_LEVEL;
-    for (; i < width; i++)
-        line[i] = BLANKING_LEVEL;
-}
-
-uint8_t DRAM_ATTR _sync_type[8] = {0,0,0,3,3,2,0,0};
-void IRAM_ATTR vsync(uint16_t* line, int i)
-{
-    uint8_t t = _sync_type[i-304];
-    vsync2(line,_line_width/2, t & 2);
-    vsync2(line+_line_width/2,_line_width/2, t & 1);
-}
-
-// Wait for blanking before starting drawing
-// avoids tearing in our unsynchonized world
-#ifdef ESP_PLATFORM
-void video_sync()
-{
-  if (!_lines)
-    return;
-  int n = 0;
-  if (_line_counter < _active_lines)
-    n = (_active_lines - _line_counter)*1000/15600;
-  vTaskDelay(n+1);
-}
-#endif
-
-// Workhorse ISR handles audio and video updates
-extern "C"
-void IRAM_ATTR video_isr(volatile void* vbuf)
-{
-    if (!_lines)
-        return;
-
-    ISR_BEGIN();
-
-    uint8_t s = _audio_r < _audio_w ? _audio_buffer[_audio_r++ & (sizeof(_audio_buffer)-1)] : 0x20;
-    audio_sample(s);
-    //audio_sample(_sin64[_x++ & 0x3F]);
-
-#ifdef IR_PIN
-    ir_sample();
-#endif
-
-    int i = _line_counter++;
-    uint16_t* buf = (uint16_t*)vbuf;
-    if (i < 32) {
-        blanking(buf,false);                // pre render/black 0-32
-    } else if (i < _active_lines + 32) {    // active video 32-272
-        sync(buf,_hsync);
-        burst(buf);
-        blit(_lines[i-32],buf + _active_start);
-    } else if (i < 304) {                   // post render/black 272-304
-        blanking(buf,false);
-    } else {
-        vsync(buf,i);                    // 8 lines of sync 304-312
-    }
-
-    if (_line_counter == _line_count) {
-        _line_counter = 0;                      // frame is done
-        _frame_counter++;
-    }
-
-    ISR_END();
-}
-#endif

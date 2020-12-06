@@ -31,7 +31,7 @@ extern "C" {
 using namespace std;
 
 // https://wiki.nesdev.com/w/index.php/NTSC_video
-// NES/SMS have pixel rates of 5.3693175, or 2/3 color clock
+// NES have pixel rates of 5.3693175, or 2/3 color clock
 // in 3 phase mode each pixel gets 2 DAC values written, 2 color clocks = 3 nes pixels
 
 uint32_t nes_3_phase[64] = {
@@ -153,33 +153,6 @@ void make_ntsc_palette()
 		//printf("0x%08x\n", sampl);
 	}
 }
-
-//Makes four samples (one cycle) using QAM modulation on the color carrier for PAL (even/odd lines) from a RGB palette
-void make_pal_palette()
-{
-	float ofs = 20.f;		//black level
-    float amp = 65.f;		//signal span
-    float hue = M_PI;		//hue correction if any...
-	float saturation = 0.8f;	//Color saturation
-	for (int j = 0; j < 64; j++)
-	{
-		float y = (0.299f * _nes_r[j] + 0.587f * _nes_g[j] + 0.114f * _nes_b[j])/255.f;
-		float u = (-0.147407f * _nes_r[j] - 0.289391f * _nes_g[j] + 0.436798f * _nes_b[j])/255.f;
-		float v = (0.614777f * _nes_r[j] - 0.514799f * _nes_g[j] - 0.099978f * _nes_b[j])/255.f;
-		float wt = 0;
-		uint32_t e_sampl = 0;
-		uint32_t o_sampl = 0;
-		for (int i = 3; i >= 0; i--)
-		{
-			e_sampl |= (uint32_t) round(ofs + amp * (y + saturation * (u * sinf(wt+hue) + v * cosf(wt+hue)))) << (i*8);
-			o_sampl |= (uint32_t) round(ofs + amp * (y + saturation * (u * sinf(wt-hue) - v * cosf(wt-hue)))) << (i*8);
-			wt += M_PI/2.f;
-		}
-		_nes_yuv_4_phase_pal[j] = e_sampl;
-		_nes_yuv_4_phase_pal[j+64] = o_sampl;
-		//printf("0x%08x  0x%08x\n", e_sampl, o_sampl);
-	}
-}
 #endif
 
 uint8_t* _nofrendo_rom = 0;
@@ -239,7 +212,7 @@ std::string to_string(int i);
 class EmuNofrendo : public Emu {
     uint8_t** _lines;
 public:
-    EmuNofrendo(int ntsc) : Emu("nofrendo",256,240,ntsc,(16 | (1 << 8)),4,EMU_NES)    // audio is 16bit, 3 or 6 cc width
+    EmuNofrendo() : Emu("nofrendo", 256, 240, (16 | (1 << 8)), 4)    // audio is 16bit, 3 or 6 cc width
     {
         _lines = 0;
         _ext = _nes_ext;
@@ -252,7 +225,6 @@ public:
     {
 #ifdef calc_palettes
 		make_ntsc_palette();
-        make_pal_palette();
 #endif
     }
 
@@ -516,9 +488,6 @@ public:
     }
 };
 
-Emu* NewNofrendo(int ntsc)
-{
-    return new EmuNofrendo(ntsc);
+Emu* NewNofrendo() {
+    return new EmuNofrendo();
 }
-
-

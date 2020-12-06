@@ -322,7 +322,6 @@ public:
     int _width;
     int _height;
     int _hilite;
-    int _flavor;
     int OVERLAY_WIDTH;
     int OVERLAY_HEIGHT;
 
@@ -345,29 +344,14 @@ public:
         }
     }
 
-    void init(uint8_t** lines, int width, int height, int flavor)
+    void init(uint8_t** lines, int width, int height)
     {
         _lines = lines;
         _width = width;
         _height = height;
-        _flavor = flavor;
-        switch (_flavor) {
-            case EMU_NES:
-                OVERLAY_WIDTH = 28;
-                OVERLAY_HEIGHT = 20;
-                set_colors(0x39,0x09);  // nes
-                break;
-            case EMU_ATARI:
-                OVERLAY_WIDTH = 34;
-                OVERLAY_HEIGHT = 22;
-                set_colors(0xCE,0xC2);  // atari
-                break;
-            case EMU_SMS:
-                OVERLAY_WIDTH = 28;
-                OVERLAY_HEIGHT = 20;
-                set_colors(7<<2,1<<3);  // sms - 332 rgb
-                break;
-        }
+        OVERLAY_WIDTH = 28;
+        OVERLAY_HEIGHT = 20;
+        set_colors(0x39,0x09);  // nes
 
         _buf = new uint8_t[OVERLAY_WIDTH*OVERLAY_HEIGHT];
         memset(_buf,0,OVERLAY_WIDTH*OVERLAY_HEIGHT);
@@ -435,23 +419,10 @@ public:
     inline void luma(uint8_t* dst, int c)
     {
         uint8_t p = getp(dst);
-        uint8_t r,g,b;
-        switch (_flavor) {
-            case EMU_NES:
-                b = (((p >> 4) & 3) * c) >> 7;
-                if (b > 3) b = 3;
-                p = (b << 4) | (p & 0xCF);  // nes luma adjust
-                break;
-            case EMU_ATARI:
-                p = (((p & 0xF) * c) >> 7) | (p & 0xF0);  // atari luma adjust
-                break;
-            case EMU_SMS:
-                r = ((p & 0xE0) * c >> 7) & 0xE0;  // sms
-                g = ((p & 0x1C) * c >> 7) & 0x1C;
-                b = ((p & 0x03) * c >> 7) & 0x03;
-                p = r | g | b;
-                break;
-        }
+        uint8_t b = (((p >> 4) & 3) * c) >> 7;
+        if (b > 3) b = 3;
+        p = (b << 4) | (p & 0xCF);  // nes luma adjust
+
         setp(dst,p);
     }
 
@@ -726,19 +697,6 @@ public:
         return i;
     }
 
-    void disk_key(int dindex)
-    {
-        if (_emu->flavor != EMU_ATARI)
-            return;
-        if (dindex == 9 && is_disk(_hilited)) { // '0' key
-            eject_disk(_hilited);
-            return;
-        }
-        if (!is_disk(_hilited)) //|| (_disks[dindex] == _hilited))
-            return;
-        insert_disk(dindex,_hilited);
-    }
-
     // raw keycode
     bool key(int keycode, int pressed, int mods)
     {
@@ -761,7 +719,6 @@ public:
                 case 30:        // 1 key
                 case 31:        // 2 key
                 case 39:        // 0 key
-                    disk_key(keycode-30);
                     break;
                 case 40:
                     enter(mods);    // return
@@ -998,7 +955,7 @@ void gui_start(Emu* emu, const char* path)
     _gui._emu = emu;
     _gui._overlay = &_overlay;
     _gui.insert_default(path);
-    _overlay.init(emu->video_buffer(),emu->width,emu->height,emu->flavor);
+    _overlay.init(emu->video_buffer(),emu->width,emu->height);
 }
 
 void gui_update()
