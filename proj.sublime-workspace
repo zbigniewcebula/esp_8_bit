@@ -1,0 +1,623 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"uin",
+				"uint16_t\tabc"
+			],
+			[
+				"uint",
+				"uint32_t\tabc"
+			],
+			[
+				"_line",
+				"_line_counter\tabc"
+			],
+			[
+				"VIDEO",
+				"VIDEO_STANDARD\tabc"
+			],
+			[
+				"prn",
+				"println\tabc"
+			],
+			[
+				"back",
+				"background-image\tproperty"
+			],
+			[
+				"for",
+				"fori\tfor i,v in ipairs()"
+			],
+			[
+				"soloud_sdl2",
+				"soloud_sdl2_dll.c\t(makefile)"
+			],
+			[
+				"inclu",
+				"include\t(makefile)"
+			],
+			[
+				"solou",
+				"soloud_sdl2.cpp"
+			],
+			[
+				"heigh",
+				"height\tabc"
+			],
+			[
+				"op",
+				"open\t(parser.py)"
+			],
+			[
+				"PNG",
+				"PNG_EMOJI/"
+			],
+			[
+				"try",
+				"try\tTry/Except"
+			],
+			[
+				"jsOn",
+				"jsonObj\tabc"
+			],
+			[
+				"uplo",
+				"uploadOk\tabc"
+			],
+			[
+				"nad",
+				"nadpiszWartosc\tabc"
+			],
+			[
+				"digi",
+				"digitalWrite\tArduino digitalWrite"
+			],
+			[
+				"prin",
+				"println\tabc"
+			],
+			[
+				"max",
+				"maxMenuOption\tabc"
+			],
+			[
+				"analo",
+				"analogWrite\tArduino analogWrite"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"Insall",
+				"Package Control: Install Package"
+			],
+			[
+				"Install",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: insta",
+				"Package Control: Install Package"
+			],
+			[
+				"Remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"isntal",
+				"Package Control: Install Package"
+			],
+			[
+				"INSTAL",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/GIT/esp_8_bit"
+	],
+	"file_history":
+	[
+		"/C/GIT/esp_8_bit/esp_8_bit.ino",
+		"/C/GIT/esp_8_bit/config.h",
+		"/C/GIT/esp_8_bit/src/emu_nofrendo.cpp",
+		"/C/GIT/esp_8_bit/src/emu.h",
+		"/C/Users/zbigniew/Desktop/esp_8_bit/esp_8_bit.ino",
+		"/C/Users/zbigniew/Desktop/esp_8_bit/config.h",
+		"/C/GIT/esp_8_bit/src/hid_server/hci_transport.h",
+		"/C/GIT/esp_8_bit/src/hid_server/hci_server.h",
+		"/C/GIT/esp_8_bit/src/hid_server/hci_server.cpp",
+		"/C/GIT/esp_8_bit/src/hid_server/hid_server.h",
+		"/C/GIT/esp_8_bit/src/hid_server/hid_server.cpp",
+		"/C/GIT/esp_8_bit/src/hid_server/hci_transport_esp32.cpp",
+		"/C/GIT/esp_8_bit/src/nofrendo/bitmap.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/vrcvisnd.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/vrcvisnd.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/vid_drv.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/vid_drv.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/version.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/osd.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/osd.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/noftypes.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/nofrendo.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/nofrendo.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/nofconfig.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/nesstate.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/nesstate.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/nesinput.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/nesinput.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/nes6502.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/nes6502.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/nes_rom.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/nes_rom.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/nes_ppu.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/nes_ppu.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/nes_pal.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/nes_pal.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/nes_mmc.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/nes_mmc.c",
+		"/C/GIT/esp_8_bit/img/312.5khz_dds_20mhz.png",
+		"/C/GIT/esp_8_bit/img/apll.png",
+		"/C/GIT/esp_8_bit/img/atr_image_explorer.png",
+		"/C/GIT/esp_8_bit/img/esp8bit.jpg",
+		"/C/GIT/esp_8_bit/img/gameboy_fit.png",
+		"/C/GIT/esp_8_bit/img/inputdevices.jpg",
+		"/C/GIT/esp_8_bit/README.md",
+		"/C/GIT/esp_8_bit/src/gui.cpp",
+		"/C/GIT/esp_8_bit/src/ir_input.h",
+		"/C/GIT/esp_8_bit/src/emu.cpp",
+		"/C/GIT/esp_8_bit/src/nofrendo/config.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/bitmap.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/event.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/event.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/fds_snd.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/fds_snd.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/gui.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/gui.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/gui_elem.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/gui_elem.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/libsnss.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/libsnss.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/log.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/log.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/map000.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map001.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map002.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map003.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map004.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map005.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map007.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map008.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map009.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map011.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map015.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map016.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map018.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map019.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map024.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map032.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map033.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map034.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map040.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map041.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map042.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map046.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map050.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map064.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map065.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map066.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map070.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map073.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map075.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map078.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map079.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map085.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map093.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map087.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map094.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map099.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map160.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map229.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/map231.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/mapvrc.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/memguard.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/memguard.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/mmc5_snd.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/mmc5_snd.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/mmclist.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/mmclist.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/nes.h",
+		"/C/GIT/esp_8_bit/src/nofrendo/nes.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/nes_apu.c",
+		"/C/GIT/esp_8_bit/src/nofrendo/nes_apu.h",
+		"/C/GIT/esp_8_bit/src/video_out.h",
+		"/C/Users/zbigniew/AppData/Local/Temp/message.txt",
+		"/C/GIT/esp_8_bit/data/smsplus/ftrack.gg",
+		"/C/GIT/esp_8_bit/data/smsplus/baraburuu.sms",
+		"/C/GIT/esp_8_bit/data/nofrendo/tokumaru_raycast.nes",
+		"/C/GIT/esp_8_bit/data/atari800/wasteland.atr",
+		"/C/GIT/esp_8_bit/data/atari800/star_raiders_II.atr",
+		"/C/GIT/esp_8_bit/data/atari800/runner_bear.xex",
+		"/C/GIT/esp_8_bit/data/atari800/raymaze_2000_ntsc.xex",
+		"/C/GIT/esp_8_bit/data/atari800/numen_rubik.atr",
+		"/C/GIT/esp_8_bit/data/atari800/more.xex",
+		"/C/GIT/esp_8_bit/data/atari800/mini_zork.atr",
+		"/C/GIT/esp_8_bit/data/atari800/maze.xex",
+		"/C/GIT/esp_8_bit/data/atari800/gtia_blast.xex",
+		"/C/GIT/esp_8_bit/data/atari800/gravity_worms.atr",
+		"/C/GIT/esp_8_bit/data/atari800/dos20.atr"
+	],
+	"find":
+	{
+		"height": 22.0
+	},
+	"find_in_files":
+	{
+		"height": 100.0,
+		"where_history":
+		[
+			"C:\\GIT\\esp_8_bit,C:\\GIT\\esp_8_bit\\src,C:\\GIT\\esp_8_bit\\src\\nofrendo",
+			"C:\\Users\\zbigniew\\Desktop\\EMULATOR\\src\\nofrendo,C:\\Users\\zbigniew\\Desktop\\EMULATOR\\src",
+			"C:\\Users\\zbigniew\\Desktop\\EMULATOR\\src\\nofrendo",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"ppu_renderbg",
+			"ppu_renderscanline",
+			"ppu_scanline",
+			"scanline",
+			"hblank",
+			"nes_renderframe",
+			"nes_emulate_frame",
+			"gui_update",
+			"nes_emulate_frame",
+			"update",
+			"update(",
+			"gui_update",
+			"xthal_get_ccount",
+			"video_sync",
+			"video_init",
+			"update",
+			"video_buffer()",
+			"_lines",
+			"video_out.h",
+			"_lines",
+			"   ",
+			"ppu_t",
+			"nes_pal",
+			"NES_VISIBLE_HEIGHT",
+			"    ",
+			"   ",
+			"\t ",
+			"   ",
+			"\t ",
+			"  ",
+			"   ",
+			"\t ",
+			"    ",
+			"_burst1",
+			"_burst0",
+			"    ",
+			"  ",
+			"cc_width",
+			"flavor",
+			"cc_width",
+			"nes_3_phase",
+			"sokoban_nes",
+			"disk_key",
+			"NewNofrendo",
+			"EmuNofrendo",
+			"ir_flashback",
+			"init",
+			"flavor",
+			"standard",
+			"Emu(",
+			"->standard",
+			"standard",
+			"Emu(",
+			"EmuNofrendo",
+			"NewNofrendo",
+			"video_init",
+			"SMS",
+			"nonfredo",
+			"SMS",
+			"_flavor",
+			"atari",
+			"calc_palettes",
+			"make_pal_palette",
+			"Emu",
+			"nofrendo",
+			"machine",
+			"mechine",
+			"machine",
+			"_machine",
+			"EMU_NES",
+			"EMULATOR",
+			"EMU_NES",
+			"EMU_NES6",
+			"media.h",
+			"maze_xex",
+			"NewEmulator",
+			"_lines",
+			"nes_emulate_frame",
+			"_lines",
+			"video_init",
+			"init",
+			"gui_start",
+			"emu_init",
+			"emu_task",
+			"video_init",
+			"video_init_hw",
+			"start_dma",
+			"video_out",
+			"lldesc_t",
+			"video_isr",
+			"esp_intr_alloc",
+			"video_isr",
+			"initDMA",
+			"vid_blitscreen",
+			"vid_flush",
+			"blit",
+			"P0",
+			"video_init_hw",
+			"_line_counter",
+			"blit(",
+			"start_dma",
+			"video_init",
+			"TFT",
+			"VIDEO_STANDARD",
+			"END_TIMING",
+			"VIDEO_STANDARD",
+			"_lines",
+			"update",
+			"menu()",
+			"menu",
+			"audio_write_16",
+			"update_video",
+			"gui_update",
+			"gui_surface",
+			"vid_getbuffer()",
+			"vid_getbuffer",
+			"primary_buffer",
+			"vid_memcpy",
+			"vid_blitscreen",
+			"VIDEO",
+			", 25",
+			"25,",
+			"(25",
+			"25",
+			"PIN_D25",
+			"viddriver_t",
+			"driver",
+			"vid_findmode"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"\t",
+			"\n#include \"nesstate.h\"",
+			"#include \"nes_apu.h\"",
+			"#include \"nes_ppu.h\"",
+			"\n#include \"gui_elem.h\"",
+			"\n#include \"intro.h\"",
+			"\n#include \"nofrendo.h\"",
+			"\n#include \"memguard.h\"",
+			"\n#include \"pcx.h\"",
+			"\n#include \"vid_drv.h\"",
+			"\n#include \"spi_lcd.h\"",
+			"\n#include \"nesinput.h\"",
+			"\n#include \"nes_pal.h\"",
+			"\n#include \"osd.h\"",
+			"\n#include \"nes.h\"",
+			"\n#include \"nes/nes.h\"",
+			"\n#include \"log.h\"",
+			"\n#include \"gui.h\"",
+			"\n#include \"event.h\"",
+			"\n#include \"nofconfig.h\"",
+			"\n#include \"bitmap.h\"",
+			"#include \"noftypes.h\"",
+			"\t",
+			" << endl;",
+			"<< endl;",
+			"",
+			" ",
+			"",
+			"\",",
+			"\"",
+			"",
+			"_POST",
+			"]\t\t\t=",
+			"]\\t\\t\\t=",
+			"\"",
+			"false",
+			"\"",
+			"B",
+			"A"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 22.0
+	},
+	"input":
+	{
+		"height": 42.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.stino_build_panel":
+	{
+		"height": 423.0
+	},
+	"output.stino_panel":
+	{
+		"height": 125.0
+	},
+	"pinned_build_system": "",
+	"project": "proj.sublime-project",
+	"replace":
+	{
+		"height": 40.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"nes.c",
+				"C:\\GIT\\esp_8_bit\\src\\nofrendo\\nes.c"
+			],
+			[
+				"emu.cpp",
+				"C:\\GIT\\esp_8_bit\\src\\emu.cpp"
+			],
+			[
+				"hci_serv",
+				"C:\\GIT\\esp_8_bit\\src\\hid_server\\hci_server.cpp"
+			],
+			[
+				"ttt",
+				"C:\\Users\\zbigniew\\Desktop\\tttt\\tttt.ino"
+			],
+			[
+				"spi_",
+				"C:\\esp-idf\\download\\examples\\get-started\\nes\\main\\spi_lcd.c"
+			],
+			[
+				"nes_pp",
+				"nes\\nes_ppu.c"
+			],
+			[
+				"libsnss.c",
+				"libsnss\\libsnss.c"
+			],
+			[
+				"nes_r",
+				"nes\\nes_rom.c"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 388.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 588.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 172.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

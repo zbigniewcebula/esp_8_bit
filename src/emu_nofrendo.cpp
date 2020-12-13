@@ -453,7 +453,7 @@ class EmuNofrendo : public Emu {
 		virtual int update()
 		{
 			if (_nofrendo_rom)
-					_lines = nes_emulate_frame(true);
+				_lines = nes_emulate_frame(true);
 			return 0;
 		}
 

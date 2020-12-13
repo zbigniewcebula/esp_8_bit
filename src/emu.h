@@ -74,7 +74,7 @@ class Emu {
 		std::string name;
 		const char** _ext;
 		const char** _help;
-		uint8_t** _lines;
+		//uint8_t** _lines;
 
 		int width;
 		int height;
