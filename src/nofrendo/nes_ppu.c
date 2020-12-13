@@ -1031,7 +1031,7 @@ static void ppu_renderscanline(bitmap_t *bmp, int scanline, bool draw_flag)
 	}
 
 	if (draw_flag)
-			ppu_renderbg(buf);
+		ppu_renderbg(buf);
 
 	/* TODO: fetch obj data 1 scanline before */
 	if (true == ppu.drawsprites && true == draw_flag)
